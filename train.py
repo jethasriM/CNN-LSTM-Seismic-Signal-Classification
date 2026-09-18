@@ -153,7 +153,7 @@ early_stopping = EarlyStopping(
 )
 
 checkpoint = ModelCheckpoint(
-    "models/earthquake_model.keras",
+    "models/earthquake_model_v2.keras",
     monitor="val_loss",
     save_best_only=True
 )
@@ -209,7 +209,7 @@ print(f"Test Accuracy: {test_accuracy}")
 history_df = pd.DataFrame(history.history)
 
 history_df.to_csv(
-    "models/training_history.csv",
+    "models/training_history_v2.csv",
     index=False
 )
 

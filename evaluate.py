@@ -130,7 +130,7 @@ X_test = (
 # ------------------------------
 
 model = load_model(
-    "models/earthquake_model.keras"
+    "models/earthquake_model_v2.keras"
 )
 
 

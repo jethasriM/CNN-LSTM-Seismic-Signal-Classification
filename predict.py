@@ -3,7 +3,7 @@ import h5py
 from tensorflow.keras.models import load_model
 
 
-MODEL_PATH = "models/earthquake_model.keras"
+MODEL_PATH = "models/earthquake_model_v2.keras"
 NORMALIZATION_PATH = "models/normalization.npz"
 
 
