@@ -1,22 +1,48 @@
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Conv1D, MaxPooling1D, LSTM, Dense, Dropout
+from tensorflow.keras.layers import (
+    Input,
+    Conv1D,
+    MaxPooling1D,
+    LSTM,
+    Dense,
+    Dropout
+)
+
 
 def build_model(input_shape):
-    model = Sequential()
 
-    model.add(Conv1D(64, kernel_size=3, activation="relu", input_shape=input_shape))
-    model.add(MaxPooling1D(pool_size=2))
-    model.add(Dropout(0.3))
+    model = Sequential([
+        Input(shape=input_shape),
 
-    model.add(LSTM(64, return_sequences=False))
-    model.add(Dropout(0.3))
+        Conv1D(
+            filters=32,
+            kernel_size=7,
+            activation="relu"
+        ),
 
-    model.add(Dense(1))
+        MaxPooling1D(
+            pool_size=4
+        ),
+
+        Dropout(0.2),
+
+        LSTM(
+            32,
+            return_sequences=False
+        ),
+
+        Dropout(0.2),
+
+        Dense(
+            1,
+            activation="sigmoid"
+        )
+    ])
 
     model.compile(
         optimizer="adam",
-        loss="mse",
-        metrics=["mae"]
+        loss="binary_crossentropy",
+        metrics=["accuracy"]
     )
 
     return model

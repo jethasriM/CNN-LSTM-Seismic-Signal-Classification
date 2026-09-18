@@ -1,20 +1,27 @@
 import numpy as np
 import pandas as pd
-from sklearn.preprocessing import MinMaxScaler
+import h5py
 
-def load_and_preprocess(file_path, window_size=100):
-    data = pd.read_csv(file_path)
-    signal = data.values.flatten()
 
-    scaler = MinMaxScaler()
-    signal = scaler.fit_transform(signal.reshape(-1, 1)).flatten()
+def load_and_preprocess(
+    data_path="data/SeisTask_data.h5",
+    metadata_path="data/SeisTask_metadata.csv"
+):
+    metadata = pd.read_csv(metadata_path)
 
-    X, y = [], []
-    for i in range(len(signal) - window_size):
-        X.append(signal[i:i + window_size])
-        y.append(signal[i + window_size])
+    with h5py.File(data_path, "r") as f:
+        X = f["data"][:]
 
-    X = np.array(X).reshape(-1, window_size, 1)
-    y = np.array(y)
+    X = X.astype(np.float32)
+
+    # (samples, channels, time)
+    # → (samples, time, channels)
+    X = np.transpose(X, (0, 2, 1))
+    X = X[:, ::4, :]
+
+    y = metadata["signal"].values.astype(np.float32)
+
+    print("Waveform shape:", X.shape)
+    print("Labels shape:", y.shape)
 
     return X, y
